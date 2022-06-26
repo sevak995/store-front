@@ -1,0 +1,164 @@
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import LayoutApp from '../../components/Layout';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Modal, Select, Table, message } from 'antd';
+import FormItem from 'antd/lib/form/FormItem';
+import { getAllProducts } from '../../redux/cartItemsSlice';
+import { useSelector } from 'react-redux';
+import { deleteProduct } from '../../redux/cartItemsSlice';
+import { showLoading, hideLoading } from '../../redux/cartItemsSlice';
+
+const Products = () => {
+  const dispatch = useDispatch();
+  const [popModal, setPopModal] = useState(false);
+  const [editProduct, setEditProduct] = useState(false);
+
+  const productData = useSelector((state) => state.cartItems.productData);
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, []);
+
+  const handlerDelete = async (record) => {
+    try {
+      deleteProduct(record);
+      message.success('Product Deleted Successfully!');
+      dispatch(getAllProducts());
+      setPopModal(false);
+    } catch (error) {
+      message.error('Error!');
+      console.log(error);
+    }
+  };
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'Image',
+      dataIndex: 'image',
+      render: (image, record) => {
+        return (
+          <img src={record.image} alt={record.title} height={60} width={60} />
+        );
+      },
+    },
+    {
+      title: 'Price',
+      dataIndex: 'price',
+    },
+    {
+      title: 'Action',
+      dataIndex: '_id',
+      render: (id, record) => (
+        <div>
+          <DeleteOutlined
+            className="cart-action"
+            onClick={() => handlerDelete(record)}
+          />
+          <EditOutlined
+            className="cart-edit"
+            onClick={() => {
+              setEditProduct(record);
+              setPopModal(true);
+            }}
+          />
+        </div>
+      ),
+    },
+  ];
+
+  const handlerSubmit = async (value) => {
+    if (!editProduct) {
+      try {
+        dispatch(showLoading());
+        const res = await axios.post('/api/products/addproducts', value);
+        message.success('Product Added Successfully!');
+        dispatch(getAllProducts());
+        setPopModal(false);
+        dispatch(hideLoading());
+      } catch (error) {
+        dispatch(hideLoading());
+        message.error('Error!');
+        console.log(error);
+      }
+    } else {
+      try {
+        dispatch(showLoading());
+        await axios.put('/api/products/updateproducts', {
+          ...value,
+          productId: editProduct._id,
+        });
+        message.success('Product Updated Successfully!');
+        dispatch(getAllProducts());
+        setPopModal(false);
+        dispatch(hideLoading());
+      } catch (error) {
+        dispatch(hideLoading());
+        message.error('Error!');
+      }
+    }
+  };
+
+  return (
+    <LayoutApp>
+      <h2>All Products </h2>
+      <Button className="add-new" onClick={() => setPopModal(true)}>
+        Add New
+      </Button>
+      <Table
+        dataSource={productData}
+        columns={columns}
+        bordered
+        pagination={{ position: ['topLeft', 'bottomRight'], pageSize: 5 }}
+        rowKey={(record) => record._id}
+      />
+
+      {popModal && (
+        <Modal
+          title={`${editProduct !== null ? 'Edit Product' : 'Add New Product'}`}
+          visible={popModal}
+          onCancel={() => {
+            setEditProduct(false);
+            setPopModal(false);
+          }}
+          footer={false}
+        >
+          <Form
+            layout="vertical"
+            initialValues={editProduct}
+            onFinish={handlerSubmit}
+          >
+            <FormItem name="name" label="Name">
+              <Input />
+            </FormItem>
+            <Form.Item name="category" label="Category">
+              <Select>
+                <Select.Option value="pizzas">Pizzas</Select.Option>
+                <Select.Option value="burgers">Burgers</Select.Option>
+                <Select.Option value="drinks">Drinks</Select.Option>
+              </Select>
+            </Form.Item>
+            <FormItem name="price" label="Price">
+              <Input />
+            </FormItem>
+            <FormItem name="image" label="Image URL">
+              <Input />
+            </FormItem>
+            <div className="form-btn-add">
+              <Button htmlType="submit" className="add-new">
+                Add
+              </Button>
+            </div>
+          </Form>
+        </Modal>
+      )}
+    </LayoutApp>
+  );
+};
+
+export default Products;
