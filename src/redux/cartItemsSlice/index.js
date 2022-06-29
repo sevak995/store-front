@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 const initialState = {
   loading: false,
@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const cartItemsSlice = createSlice({
-  name: 'cartItems',
+  name: "cartItems",
   initialState,
   reducers: {
     showLoading: (state) => {
@@ -44,6 +44,7 @@ const cartItemsSlice = createSlice({
     },
     setProductData: (state, action) => {
       state.productData = action.payload;
+      console.log(state.productData);
     },
   },
 });
@@ -61,7 +62,7 @@ export const {
 export const getAllBills = () => async (dispatch) => {
   try {
     dispatch(showLoading());
-    const { data } = await axios.get('/api/bills/getbills');
+    const { data } = await axios.get("/api/bills/getbills");
     dispatch(setBillsData(data));
     dispatch(hideLoading());
   } catch (error) {
@@ -70,22 +71,28 @@ export const getAllBills = () => async (dispatch) => {
   }
 };
 
-export const getAllProducts = () => async (dispatch) => {
-  try {
-    dispatch(showLoading());
-    const { data } = await axios.get('/api/products/getproducts');
-    dispatch(setProductData(data));
-    dispatch(hideLoading());
-  } catch (error) {
-    console.log(error);
-    dispatch(hideLoading());
-  }
-};
+export const getProducts =
+  (query = {}) =>
+  async (dispatch) => {
+    const params = new URLSearchParams(query);
+
+    try {
+      dispatch(showLoading());
+      const { data } = await axios.get(`/api/products/getproducts?${params}`);
+
+      dispatch(setProductData(data));
+      dispatch(hideLoading());
+    } catch (error) {
+      console.log(error);
+      dispatch(hideLoading());
+    }
+  };
 
 export const deleteProduct = (record) => async (dispatch) => {
+  console.log("deleteProduct", record);
   try {
     dispatch(showLoading());
-    await axios.post('/api/products/deleteproducts', {
+    await axios.post("/api/products/deleteproducts", {
       productId: record._id,
     });
 
