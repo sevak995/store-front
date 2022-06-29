@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Layout, Menu, Spin } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Layout, Menu, Spin } from "antd";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -8,10 +8,10 @@ import {
   MoneyCollectOutlined,
   LogoutOutlined,
   ShoppingCartOutlined,
-} from '@ant-design/icons';
-import './layout.css';
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+} from "@ant-design/icons";
+import "./layout.css";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const { Header, Sider, Content } = Layout;
 
@@ -26,49 +26,49 @@ const LayoutApp = ({ children }) => {
   };
 
   useEffect(() => {
-    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const menuItems = [
     {
-      key: '/',
+      key: "/",
       icon: <HomeOutlined />,
-      label: 'Home',
+      label: "Home",
       onClick: () => {
-        navigate('/');
+        navigate("/");
       },
     },
     {
-      key: '/bills',
+      key: "/bills",
       icon: <MoneyCollectOutlined />,
-      label: 'Bills',
+      label: "Bills",
       onClick: () => {
-        navigate('/bills');
+        navigate("/bills");
       },
     },
     {
-      key: '/products',
+      key: "/products",
       icon: <HomeOutlined />,
-      label: 'Products',
+      label: "Products",
       onClick: () => {
-        navigate('/products');
+        navigate("/products");
       },
     },
     {
-      key: '/customers',
+      key: "/customers",
       icon: <UserSwitchOutlined />,
-      label: 'Customers',
+      label: "Customers",
       onClick: () => {
-        navigate('/customers');
+        navigate("/customers");
       },
     },
     {
-      key: 'logout',
+      key: "logout",
       icon: <LogoutOutlined />,
-      label: 'LogOut',
+      label: "LogOut",
       onClick: () => {
-        localStorage.removeItem('auth');
-        navigate('/login');
+        localStorage.removeItem("auth");
+        navigate("/login");
       },
     },
   ];
@@ -77,7 +77,9 @@ const LayoutApp = ({ children }) => {
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo">
-          <h2 className="logo-title">BOOK STORE</h2>
+          <h2 className="logo-title" onClick={() => navigate("/")}>
+            BOOK STORE
+          </h2>
         </div>
         <Menu
           theme="dark"
@@ -94,11 +96,11 @@ const LayoutApp = ({ children }) => {
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               {
-                className: 'trigger',
+                className: "trigger",
                 onClick: toggle,
               }
             )}
-            <div className="cart-items" onClick={() => navigate('/cart')}>
+            <div className="cart-items" onClick={() => navigate("/cart")}>
               <ShoppingCartOutlined />
               <span className="cart-badge">{cartItems.length}</span>
             </div>
@@ -106,7 +108,7 @@ const LayoutApp = ({ children }) => {
           <Content
             className="site-layout-background"
             style={{
-              margin: '24px 16px',
+              margin: "24px 16px",
               padding: 24,
               minHeight: 280,
             }}

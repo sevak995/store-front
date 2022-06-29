@@ -294,3 +294,15 @@ body {
   align-content: center;
   justify-content: center;
 }
+
+.ant-input-search-button {
+  background: rgba(0, 0, 0, 0.85) !important;
+}
+
+.ant-input-group-wrapper {
+  margin-bottom: 25px;
+}
+
+.logo-title:hover {
+  background-color: gray;
+}

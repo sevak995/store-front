@@ -3,16 +3,17 @@ import LayoutApp from "../../components/Layout";
 import { Row, Col } from "antd";
 import Product from "../../components/Product";
 import { useDispatch } from "react-redux";
-import { getProducts } from "../../redux/cartItemsSlice";
+import { getProducts, searchProducts } from "../../redux/cartItemsSlice";
 import { useSelector } from "react-redux";
-import { Pagination } from "antd";
+import { Pagination, Input } from "antd";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { productData } = useSelector((state) => state.cartItems);
 
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("Fiction");
   const [page, setPage] = useState(1);
+  const [query, setQuery] = useState(null);
   const categories = [
     {
       name: "Fiction",
@@ -30,12 +31,33 @@ const Home = () => {
     },
   ];
 
+  const { Search } = Input;
+
   useEffect(() => {
-    dispatch(getProducts({ page: page, limit: 5 }));
-  }, [selectedCategory, page]);
+    if (query) {
+      dispatch(searchProducts(query));
+      setPage(1);
+    } else {
+      dispatch(
+        getProducts({ page: page, limit: 4, category: selectedCategory })
+      );
+    }
+  }, [selectedCategory, page, query]);
+
+  const onSearch = (value) => {
+    // dispatch(searchProducts(value));
+    setQuery(value);
+  };
 
   return (
     <LayoutApp>
+      <Search
+        placeholder="Book name"
+        allowClear
+        enterButton="Search"
+        size="large"
+        onSearch={onSearch}
+      />
       <div className="category">
         {categories.map((category) => (
           <div
@@ -43,7 +65,11 @@ const Home = () => {
             className={`categoryFlex ${
               selectedCategory === category.name && "category-active"
             }`}
-            onClick={() => setSelectedCategory(category.name)}
+            onClick={() => {
+              setSelectedCategory(category.name);
+              setPage(1);
+              setQuery(null);
+            }}
           >
             <h3 className="categoryName">{category.name}</h3>
             <img
@@ -73,7 +99,7 @@ const Home = () => {
       <Pagination
         defaultCurrent={page}
         total={50}
-        onChange={(page, pageSize) => setPage(page)}
+        onChange={(page) => setPage(page)}
         className="pagination"
       />
     </LayoutApp>

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Layout from '../../components/Layout';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import Layout from "../../components/Layout";
 import {
   DeleteOutlined,
   PlusCircleOutlined,
   MinusCircleOutlined,
-} from '@ant-design/icons';
-import { Button, Form, Input, message, Modal, Select, Table } from 'antd';
-import FormItem from 'antd/lib/form/FormItem';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { updateCart, deleteFromCart } from '../../redux/cartItemsSlice';
+} from "@ant-design/icons";
+import { Button, Form, Input, message, Modal, Select, Table } from "antd";
+import FormItem from "antd/lib/form/FormItem";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { updateCart, deleteFromCart } from "../../redux/cartItemsSlice";
 
 const Cart = () => {
   const [subTotal, setSubTotal] = useState(0);
@@ -37,25 +37,23 @@ const Cart = () => {
 
   const columns = [
     {
-      title: 'Name',
-      dataIndex: 'name',
+      title: "Name",
+      dataIndex: "name",
     },
     {
-      title: 'Image',
-      dataIndex: 'image',
+      title: "Image",
+      dataIndex: "image",
       render: (image, record) => {
-        console.log('record', record);
-
         return <img src={image} alt={record.name} height={60} width={60} />;
       },
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
+      title: "Price",
+      dataIndex: "price",
     },
     {
-      title: 'Quantity',
-      dataIndex: '_id',
+      title: "Quantity",
+      dataIndex: "_id",
       render: (id, record) => (
         <div>
           <MinusCircleOutlined
@@ -71,8 +69,8 @@ const Cart = () => {
       ),
     },
     {
-      title: 'Action',
-      dataIndex: '_id',
+      title: "Action",
+      dataIndex: "_id",
       render: (id, record) => (
         <DeleteOutlined
           className="cart-action"
@@ -102,13 +100,13 @@ const Cart = () => {
             Number(subTotal) + Number(((subTotal / 100) * 10).toFixed(2))
           ).toFixed(2)
         ),
-        userId: JSON.parse(localStorage.getItem('auth'))._id,
+        userId: JSON.parse(localStorage.getItem("auth"))._id,
       };
-      await axios.post('/api/bills/addbills', newObject);
-      message.success('Bill Generated!');
-      navigate('/bills');
+      await axios.post("/api/bills/addbills", newObject);
+      message.success("Bill Generated!");
+      navigate("/bills");
     } catch (error) {
-      message.error('Error!');
+      message.error("Error!");
     }
   };
   return (

@@ -44,7 +44,6 @@ const cartItemsSlice = createSlice({
     },
     setProductData: (state, action) => {
       state.productData = action.payload;
-      console.log(state.productData);
     },
   },
 });
@@ -79,6 +78,21 @@ export const getProducts =
     try {
       dispatch(showLoading());
       const { data } = await axios.get(`/api/products/getproducts?${params}`);
+
+      dispatch(setProductData(data));
+      dispatch(hideLoading());
+    } catch (error) {
+      console.log(error);
+      dispatch(hideLoading());
+    }
+  };
+
+export const searchProducts =
+  (query = "") =>
+  async (dispatch) => {
+    try {
+      dispatch(showLoading());
+      const { data } = await axios.get(`/api/products/search?name=${query}`);
 
       dispatch(setProductData(data));
       dispatch(hideLoading());

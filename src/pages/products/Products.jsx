@@ -23,7 +23,7 @@ const Products = () => {
 
   const handlerDelete = async (record) => {
     try {
-      deleteProduct(record);
+      dispatch(deleteProduct(record));
       message.success("Product Deleted Successfully!");
       dispatch(getProducts());
       setPopModal(false);
@@ -84,7 +84,6 @@ const Products = () => {
       } catch (error) {
         dispatch(hideLoading());
         message.error("Error!");
-        console.log(error);
       }
     } else {
       try {
@@ -139,9 +138,9 @@ const Products = () => {
             </FormItem>
             <Form.Item name="category" label="Category">
               <Select>
-                <Select.Option value="pizzas">Pizzas</Select.Option>
-                <Select.Option value="burgers">Burgers</Select.Option>
-                <Select.Option value="drinks">Drinks</Select.Option>
+                <Select.Option value="Fiction">Fiction</Select.Option>
+                <Select.Option value="Historical">Historical</Select.Option>
+                <Select.Option value="Dictionaries">Dictionaries</Select.Option>
               </Select>
             </Form.Item>
             <FormItem name="price" label="Price">
