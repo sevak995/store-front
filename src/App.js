@@ -1,18 +1,14 @@
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
-import 'antd/dist/antd.min.css';
-import './App.css';
-import Home from './pages/home/Home';
-import Products from './pages/products/Products';
-import Cart from './pages/cart/Cart';
-import Login from './pages/login/Login';
-import Register from './pages/register/Register';
-import Bills from './pages/bills/Bills';
-import Customers from './pages/customers/Customers';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import "antd/dist/antd.min.css";
+import "./App.css";
+import Home from "./pages/home/Home";
+import Products from "./pages/products/Products";
+import Cart from "./pages/cart/Cart";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
+import Bills from "./pages/bills/Bills";
+import Customers from "./pages/customers/Customers";
+import ProtectedRouter from "./components/ProtectedRouter";
 
 function App() {
   return (
@@ -68,11 +64,3 @@ function App() {
 }
 
 export default App;
-
-export function ProtectedRouter({ children }) {
-  if (localStorage.getItem('auth')) {
-    return children;
-  } else {
-    return <Navigate to="/login" />;
-  }
-}

@@ -1,10 +1,10 @@
-import { Button, Form, Input, message } from 'antd';
-import FormItem from 'antd/lib/form/FormItem';
-import axios from 'axios';
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
-import { showLoading, hideLoading } from '../../redux/cartItemsSlice';
+import { Button, Form, Input, message } from "antd";
+import FormItem from "antd/lib/form/FormItem";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { showLoading, hideLoading } from "../../redux/cartItemsSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -13,23 +13,23 @@ const Login = () => {
   const handlerSubmit = async (value) => {
     try {
       dispatch(showLoading);
-      const res = await axios.post('/api/users/login', value);
+      const res = await axios.post("/api/users/login", value);
       dispatch(hideLoading);
-      message.success('User Login Successfully!');
-      localStorage.setItem('auth', JSON.stringify(res.data));
-      navigate('/');
+      message.success("User Login Successfully!");
+      localStorage.setItem("auth", JSON.stringify(res.data));
+      navigate("/");
     } catch (error) {
       dispatch(hideLoading);
-      message.error('Error!');
+      message.error("Error!");
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem('auth')) {
-      localStorage.getItem('auth');
-      navigate('/');
+    if (localStorage.getItem("auth")) {
+      localStorage.getItem("auth");
+      navigate("/");
     }
-  }, [navigate]);
+  }, [navigate, localStorage.getItem("auth")]);
 
   return (
     <div className="form">
@@ -50,6 +50,7 @@ const Login = () => {
             <Link className="form-other" to="/register">
               Register Here!
             </Link>
+            <a href="http://localhost:3000/auth/google">Auth with GOOGLE</a>
           </div>
         </Form>
       </div>

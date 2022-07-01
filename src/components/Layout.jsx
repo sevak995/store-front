@@ -12,6 +12,7 @@ import {
 import "./layout.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const { Header, Sider, Content } = Layout;
 
@@ -68,6 +69,7 @@ const LayoutApp = ({ children }) => {
       label: "LogOut",
       onClick: () => {
         localStorage.removeItem("auth");
+        axios.get("/auth/logout");
         navigate("/login");
       },
     },

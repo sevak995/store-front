@@ -1,7 +1,7 @@
-import React from 'react';
-import { Button, Card } from 'antd';
-import { useDispatch } from 'react-redux';
-import { handlerToCart } from '../redux/cartItemsSlice';
+import React from "react";
+import { Button, Card } from "antd";
+import { useDispatch } from "react-redux";
+import { handlerToCart } from "../redux/cartItemsSlice";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
